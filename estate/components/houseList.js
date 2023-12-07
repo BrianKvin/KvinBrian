@@ -1,11 +1,10 @@
 import HouseRow from './houseRow';
 import useHouses from '@/hooks/useHouses';
 import loadingStatus from '@/helpers/loadingStatus';
-import LoadingIndicator from './loadingIndicator';
-import useGetRequest from '@/hooks/useGetRequest';
+import LoadingIndicator from './loadingIndicator'; 
 
 
-const HouseList = ({ selectedHouse }) => {
+const HouseList = () => {
   const { houses, setHouses, loadingState } = useHouses();
 
   if (loadingState !== loadingStatus.loaded)
@@ -38,7 +37,7 @@ const HouseList = ({ selectedHouse }) => {
         </thead>
         <tbody>
           {houses.map((h) => (
-            <HouseRow key={h.id} house={h} selectedHouse={selectedHouse} />
+            <HouseRow key={h.id} house={h} />
           ))}
         </tbody>
       </table>
