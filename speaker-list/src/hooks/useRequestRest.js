@@ -7,22 +7,24 @@ export const REQUEST_STATUS = {
   FAILURE: "failure",
 };
 
-const restUrl = "api/speakers";
+const restUrl = "/api/speakers";
 
 function useRequestRest() {
   const [data, setData] = useState([]);
   const [requestStatus, setRequestStatus] = useState(REQUEST_STATUS.LOADING);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   useEffect(() => {
     async function delayFunc() {
       try {
         const result = await axios.get(restUrl);
+        console.log("Axios Config:", result.config)
         setRequestStatus(REQUEST_STATUS.SUCCESS);
         setData(result.data);
       } catch (e) {
+        console.log("Error fetching data:", e)
         setRequestStatus(REQUEST_STATUS.FAILURE);
-        setError(e);
+        setError(e.response ? e.response.data : e.message); // setErr(e)
       }
     }
     delayFunc();

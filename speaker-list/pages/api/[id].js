@@ -17,6 +17,9 @@ export default async function handler(req, res) {
   const jsonFile = path.resolve("./", "db.json");
 
   switch (method) {
+    case "GET":
+      await getMethod();
+      break;
     case "POST":
       await postMethod();
       break;
@@ -29,6 +32,33 @@ export default async function handler(req, res) {
     default:
       res.status(501).send(`Method ${method} not implemented`);
       console.log(`Method ${method} not implemented`);
+  }
+
+  async function getMethod() {
+    try {
+      const readFileData = await readFile(jsonFile);
+      await delay(1000);
+      const speakers = JSON.parse(readFileData).speakers;
+      if (!speakers) {
+        res.status(404).send("Error: Request failed with status code 404");
+      } else {
+        const newSpeakersArray = speakers.map(function (rec) {
+          return rec.id == id ? recordFromBody : rec;
+        });
+        writeFile(
+          jsonFile,
+          JSON.stringify({ speakers: newSpeakersArray }, null, 2)
+        );
+        // res.setHeader("Content-Type", "application/json");
+        res.status(200).send(JSON.stringify(recordFromBody, null, 2));
+        console.log(`GET /api/speakers/${id}  status: 200`);
+      }
+    } catch (e) {
+      res
+        .status(500)
+        .send(`PUT /api/speakers/${id}  status: 500 unexpected error`);
+      console.log(`PUT /api/speakers/${id}  status: 200`, e);
+    }
   }
 
   async function putMethod() {
@@ -46,7 +76,7 @@ export default async function handler(req, res) {
           jsonFile,
           JSON.stringify({ speakers: newSpeakersArray }, null, 2)
         );
-        res.setHeader("Content-Type", "application/json");
+        // res.setHeader("Content-Type", "application/json");
         res.status(200).send(JSON.stringify(recordFromBody, null, 2));
         console.log(`PUT /api/speakers/${id}  status: 200`);
       }
@@ -112,7 +142,7 @@ export default async function handler(req, res) {
           jsonFile,
           JSON.stringify({ speakers: newSpeakersArray }, null, 2)
         );
-        res.setHeader("Content-Type", "application/json");
+        // res.setHeader("Content-Type", "application/json"); since I'm sending a response without a body
         res.status(200).send(JSON.stringify(newSpeakerRec, null, 2));
         console.log(`POST /api/speakers/${id}  status: 200`);
       }

@@ -38,13 +38,15 @@ function SpeakersList() {
       >
         <SpeakerAdd eventYear={eventYear} insertRecord={insertRecord} />
         <div className="row">
-          {speakersData
+          {data                             //why does speakersData not work
             .filter(function (speaker) {
               return (
                 speaker.first.toLowerCase().includes(searchQuery) ||
                 speaker.last.toLowerCase().includes(searchQuery)
+                // (speaker.first?.toLowerCase().includes(String(searchQuery)) || '') &&
+                // (speaker.last?.toLowerCase().includes(String(searchQuery)) || '')
               );
-              console.log(speakersData);
+             
             })
             .filter(function (speaker) {
               return speaker.sessions.find((session) => {
