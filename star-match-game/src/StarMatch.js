@@ -1,8 +1,9 @@
+// import GameAgain from './GameAgain';
 import colors from './themes';
 import utils from './Utils'
 import { useState, useEffect } from 'react';
 
-const StarMatch = ({ startNewGame }) => {
+export const Game = ({startNewGame}) => {
   const [stars, setStars] = useState(utils.random(1, 9));
   const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
   const [candidateNums, setCandidateNums] = useState([]);
@@ -23,12 +24,14 @@ const StarMatch = ({ startNewGame }) => {
     ? 'won'
     : secondsLeft === 0 ? 'lost' : 'active'
 
-  const resetGame = () => {
-    setStars(utils.random(1, 9));
-    setAvailableNums(utils.range(1, 9));
-    setCandidateNums([]);
-    startNewGame();
-  }
+  // const resetGame = () => {
+  //   setStars(utils.random(1, 9));
+  //   setAvailableNums(utils.range(1, 9));
+  //   setCandidateNums([]);
+  //   startNewGame();
+    
+  // }
+  
 
   const numberStatus = (number) => {
     if (!availableNums.includes(number)) {
@@ -75,7 +78,7 @@ const StarMatch = ({ startNewGame }) => {
               >
                 {gameStatus === 'lost' ? 'Game Over' : 'NIce' }
               </div>
-              <button onClick={resetGame}>Play Again</button>
+              <button onClick={startNewGame}>Play Again</button>
              </div>
           ) : (
             utils.range(1, stars).map(starId =>
@@ -103,6 +106,12 @@ const StarMatch = ({ startNewGame }) => {
       <div className="timer">Time Remaining: {secondsLeft}</div>
     </div>
   )
+}
+
+const StarMatch = () => {
+  const [gameId, setGameId] = useState(1)
+
+  return <Game key={gameId} startNewGame={() => setGameId(gameId + 1)} />
 }
 
 export default StarMatch;
